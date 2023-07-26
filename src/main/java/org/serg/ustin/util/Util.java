@@ -2,6 +2,7 @@ package org.serg.ustin.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.hibernate.SessionFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,6 +25,10 @@ public class Util {
         }
 
         return connection;
+    }
+
+    public static SessionFactory getHibernateConnection () {
+
     }
 
 }

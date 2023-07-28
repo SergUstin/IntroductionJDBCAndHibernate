@@ -1,14 +1,14 @@
 package org.serg.ustin.service;
 
 import org.serg.ustin.dao.UserDao;
-import org.serg.ustin.dao.UserDaoJDBCImpl;
+import org.serg.ustin.dao.UserDaoHibernateImpl;
 import org.serg.ustin.model.User;
 
 import java.util.List;
 
-public class UserServiceJDBCImpl implements UserService{
+public class UserServiceHibernateImpl implements UserService {
 
-    private final UserDao userDao = new UserDaoJDBCImpl();
+    private final UserDao userDao = new UserDaoHibernateImpl();
 
     @Override
     public void createUserTable() {

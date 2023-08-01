@@ -50,13 +50,31 @@ class UserServiceJDBCImplTest extends UserServiceTest {
 
     @Test
     void removeUserById() {
+        try {
+            userService.removeUserById(1L);
+        } catch (Exception e) {
+            fail("При тестировании, удаления по id пользователя произошла ошибка!\n" + e.getMessage());
+
+        }
     }
 
     @Test
     void getAllUsers() {
+        try {
+            assertFalse(userService.getAllUsers().size() != 1,
+                    "Проверить корректность работы метода, сохранения пользователя!");
+        } catch (Exception e) {
+            fail("При тестировании, получить содержисое всей таблицы произошла ошибка!\n" + e.getMessage());
+        }
     }
 
     @Test
     void clearUserTable() {
+        try {
+            assertFalse(userService.getAllUsers().size() != 0,
+                    "Метод очистки пользователей, работает не корректно!");
+        } catch (Exception e) {
+            fail("При тестировании, очистка данных всей таблицы произошла ошибка!\n" + e.getMessage());
+        }
     }
 }

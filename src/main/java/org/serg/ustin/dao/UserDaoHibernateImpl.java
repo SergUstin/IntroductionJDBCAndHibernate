@@ -1,15 +1,12 @@
 package org.serg.ustin.dao;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 import org.hibernate.query.NativeQuery;
 import org.serg.ustin.model.User;
 import org.serg.ustin.util.Util;
 
-import java.util.List;
-import java.util.Objects;
+import java.io.Serializable;
+import java.util.*;
 
 public class UserDaoHibernateImpl implements UserDao {
 
@@ -17,11 +14,10 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUserTable() {
-        String sql = "create table if not exists user (id bigint auto_increment primary key not null, name varchar(50), lastName varchar(50), age tinyint(3))";
+        String sql = "create table if not exists user (id bigint primary key not null auto_increment, name varchar(50), lastName varchar(50), age tinyint(3))";
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
-            NativeQuery query = session.createSQLQuery(sql);
-            query.executeUpdate();
+            session.createSQLQuery(sql).executeUpdate();
             transaction.commit();
         } catch (HibernateException e) {
             throw new RuntimeException(e);
@@ -76,11 +72,31 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        return null;
+        Transaction transaction = null;
+        List<User> list = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            list = session.createQuery("from User", User.class).list();
+            transaction.commit();
+        } catch (HibernateException e) {
+            if (Objects.nonNull(transaction)) {
+                transaction.rollback();
+            }
+            throw new RuntimeException(e);
+        }
+        return list;
     }
 
     @Override
     public void clearUserTable() {
-
+        String sql = "truncate table user";
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            NativeQuery query = session.createSQLQuery(sql);
+            query.executeUpdate();
+            transaction.commit();
+        } catch (HibernateException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

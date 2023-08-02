@@ -71,6 +71,7 @@ class UserServiceHibernateImplTest extends UserServiceTest {
     @Test
     void clearUserTable() {
         try {
+            userService.clearUserTable();
             assertFalse(userService.getAllUsers().size() != 0,
                     "Метод очистки пользователей, работает не корректно!");
         } catch (Exception e) {
